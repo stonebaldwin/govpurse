@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Fraunces, IBM_Plex_Mono, Public_Sans } from 'next/font/google';
 import { Toaster } from '@govpurse/ui';
+import { JsonLd } from '@/components/json-ld';
 import './globals.css';
 
 // Display serif (editorial headlines) — optical-size axis for crisp big type.
@@ -21,23 +22,60 @@ const plexMono = IBM_Plex_Mono({
   display: 'swap',
 });
 
+const SITE = process.env.NEXT_PUBLIC_APP_URL ?? 'https://govpurse.com';
+const DESCRIPTION =
+  'Search and visualize local-government spending — transaction-level vendor payments across jurisdictions, with watchdog-grade analytics and alerts.';
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://govpurse.com'),
+  metadataBase: new URL(SITE),
+  applicationName: 'Govpurse',
   title: {
     default: 'Govpurse — Follow the money in your local government',
     template: '%s · Govpurse',
   },
-  description:
-    'Search and visualize local-government spending — vendor payments, budgets, and contracts — across jurisdictions, with watchdog-grade analytics and alerts.',
+  description: DESCRIPTION,
+  openGraph: {
+    type: 'website',
+    siteName: 'Govpurse',
+    locale: 'en_US',
+    url: '/',
+    title: 'Govpurse — Follow the money in your local government',
+    description: DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Govpurse — Follow the money in your local government',
+    description: DESCRIPTION,
+  },
 };
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Govpurse',
+    url: SITE,
+    logo: `${SITE}/icon.svg`,
+    description: DESCRIPTION,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Govpurse',
+    url: SITE,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${SITE}/search?q={query}`,
+      'query-input': 'required name=query',
+    },
+  },
+];
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${fraunces.variable} ${publicSans.variable} ${plexMono.variable}`}
-    >
+    <html lang="en" className={`${fraunces.variable} ${publicSans.variable} ${plexMono.variable}`}>
       <body className="bg-paper text-ink min-h-screen font-sans antialiased">
+        <JsonLd data={structuredData} />
         {children}
         <Toaster />
       </body>

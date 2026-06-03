@@ -91,18 +91,24 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     const active = (params.sort ?? 'date') === col;
     const nextDir = active && params.dir === 'desc' ? 'asc' : 'desc';
     const href = buildQuery(current, { sort: col, dir: nextDir, page: undefined });
+    const ariaSort = active
+      ? params.dir === 'asc'
+        ? ('ascending' as const)
+        : ('descending' as const)
+      : ('none' as const);
     return (
-      <TableHead numeric={numeric}>
+      <TableHead numeric={numeric} aria-sort={ariaSort}>
         <Link
           href={href}
+          aria-label={`Sort by ${label.toLowerCase()}${active ? `, currently ${params.dir === 'asc' ? 'ascending' : 'descending'}` : ''}`}
           className={`hover:text-ink inline-flex items-center gap-1 ${numeric ? 'justify-end' : ''}`}
         >
           {label}
           {active ? (
             params.dir === 'asc' ? (
-              <ChevronUp className="size-3.5" />
+              <ChevronUp className="size-3.5" aria-hidden="true" />
             ) : (
-              <ChevronDown className="size-3.5" />
+              <ChevronDown className="size-3.5" aria-hidden="true" />
             )
           ) : null}
         </Link>
@@ -265,6 +271,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                           href={t.sourceUrl}
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label={`Open official source for ${t.vendor} (opens in new tab)`}
                           className="text-faint hover:text-primary-500 inline-flex"
                           title={
                             t.retrievedAt
@@ -272,7 +279,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                               : 'Official source'
                           }
                         >
-                          <ExternalLink className="size-3.5" />
+                          <ExternalLink className="size-3.5" aria-hidden="true" />
                         </a>
                       ) : (
                         <span className="text-faint">—</span>

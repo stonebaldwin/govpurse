@@ -25,7 +25,8 @@ import {
   type BarDatum,
   type TimeSeriesPoint,
 } from '@govpurse/ui';
-import { getVendorProfile } from '@/lib/data';
+import { getVendorProfile, listTopVendorIds } from '@/lib/data';
+import { JsonLd } from '@/components/json-ld';
 
 export const revalidate = 3600;
 
@@ -42,7 +43,14 @@ export async function generateMetadata({
     description: `How much governments paid ${data.vendor.canonicalName}: ${formatCompactCurrency(
       data.totalPaid,
     )} across ${data.byJurisdiction.length} jurisdiction(s) and ${formatNumber(data.txnCount)} payments.`,
+    alternates: { canonical: `/vendors/${id}` },
   };
+}
+
+// Prebuild only the highest-volume vendor pages; the rest render on-demand (ISR).
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  const ids = await listTopVendorIds(24);
+  return ids.map((id) => ({ id }));
 }
 
 export default async function VendorPage({ params }: { params: Promise<{ id: string }> }) {
@@ -68,8 +76,48 @@ export default async function VendorPage({ params }: { params: Promise<{ id: str
   const deptBars: BarDatum[] = byDepartment.map((d) => ({ label: d.label, value: d.total }));
   const location = [vendor.city, vendor.state].filter(Boolean).join(', ');
 
+  const site = process.env.NEXT_PUBLIC_APP_URL ?? 'https://govpurse.com';
+  const pageUrl = `${site}/vendors/${vendor.id}`;
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: vendor.canonicalName,
+      ...(vendor.city || vendor.state
+        ? {
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: vendor.city ?? undefined,
+              addressRegion: vendor.state ?? undefined,
+              addressCountry: 'US',
+            },
+          }
+        : {}),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Dataset',
+      name: `Government payments to ${vendor.canonicalName}`,
+      description: `Payments from governments to ${vendor.canonicalName}: ${formatCompactCurrency(
+        totalPaid,
+      )} across ${byJurisdiction.length} jurisdiction(s).`,
+      creator: { '@type': 'Organization', name: 'Govpurse', url: site },
+      isAccessibleForFree: true,
+      url: pageUrl,
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Vendors', item: `${site}/search` },
+        { '@type': 'ListItem', position: 2, name: vendor.canonicalName, item: pageUrl },
+      ],
+    },
+  ];
+
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
+      <JsonLd data={structuredData} />
       <VendorProfile
         name={vendor.canonicalName}
         meta={
@@ -186,7 +234,7 @@ export default async function VendorPage({ params }: { params: Promise<{ id: str
                         href={`/jurisdictions/${t.jurisdictionId}`}
                         className="hover:text-primary-500"
                       >
-                        {t.jurisdictionId}
+                        {t.jurisdictionName}
                       </Link>
                     </TableCell>
                     <TableCell className="text-muted">{t.department ?? '—'}</TableCell>

@@ -26,8 +26,8 @@
   /* Lines & secondary text */
   --color-line: #e3dccb;
   --color-line-strong: #cdc3aa;
-  --color-muted: #6c6454; /* secondary text (warm gray) */
-  --color-faint: #9a9079; /* tertiary text / placeholders */
+  --color-muted: #6c6454; /* secondary text (warm gray) — AA on paper */
+  --color-faint: #736a58; /* tertiary text / placeholders — darkened to meet AA */
 
   /* Primary — institutional treasury green (#16774a). Money + civic + trust. */
   --color-primary-50: #ecf5ef;

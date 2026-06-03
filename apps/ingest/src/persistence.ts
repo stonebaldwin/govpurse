@@ -19,16 +19,34 @@ function chunk<T>(arr: T[], size: number): T[][] {
   return out;
 }
 
-/** Deterministic transaction PK so re-ingestion updates rather than duplicates. */
+/** djb2 hash → short stable base-36 token. */
+function hashRow(s: string): string {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+}
+
+/**
+ * Deterministic transaction PK so re-ingestion updates rather than duplicates.
+ *
+ * The source record id (check / payment number) is shared across the multiple
+ * line items of a single payment, so it is NOT unique on its own — keying on it
+ * alone collapses a payment's lines into one row (dropping the majority of rows
+ * for line-itemized portals). We hash the full raw source row (each line differs
+ * in voucher / account / line-no) to keep every line, while staying stable across
+ * re-runs (identical raw row → identical id → idempotent upsert).
+ */
 export function transactionDbId(
   jurisdictionId: string,
   txn: CanonicalTransaction,
   index: number,
 ): string {
-  const key =
-    txn.sourceRecordId ??
-    `${txn.vendorNameNormalized}|${txn.amount}|${txn.transactionDate ?? ''}|${index}`;
-  return `${jurisdictionId}:${key}`;
+  const raw =
+    txn.raw && Object.keys(txn.raw).length > 0
+      ? JSON.stringify(txn.raw)
+      : `${txn.vendorNameNormalized}|${txn.amount}|${txn.transactionDate ?? ''}|${index}`;
+  const prefix = txn.sourceRecordId ? `${txn.sourceRecordId}:` : '';
+  return `${jurisdictionId}:${prefix}${hashRow(raw)}`;
 }
 
 export async function upsertVendors(db: Database, list: ResolvedVendor[]): Promise<void> {

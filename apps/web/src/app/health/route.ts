@@ -5,21 +5,20 @@ export const dynamic = 'force-dynamic';
 
 /**
  * Health endpoint. Confirms the web Worker is up and can read the shared Neon
- * database through `@govpurse/db`. Degrades gracefully when `DATABASE_URL` is not
- * configured so the scaffold is reviewable without a database.
+ * database. Returns only a COARSE status — never the underlying driver error
+ * message, which can leak infrastructure detail to an unauthenticated caller.
  */
 export async function GET(): Promise<Response> {
   const time = new Date().toISOString();
-  let db: { status: 'connected' | 'unconfigured' | 'error'; detail?: string } = {
-    status: 'unconfigured',
-  };
+  let db: { status: 'connected' | 'unconfigured' | 'error' } = { status: 'unconfigured' };
 
   if (process.env.DATABASE_URL) {
     try {
       await pingDb(process.env.DATABASE_URL);
       db = { status: 'connected' };
     } catch (err) {
-      db = { status: 'error', detail: err instanceof Error ? err.message : String(err) };
+      console.error('[health] database ping failed', err);
+      db = { status: 'error' };
     }
   }
 

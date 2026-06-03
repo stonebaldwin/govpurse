@@ -208,6 +208,14 @@ export const transactions = pgTable(
     index('transactions_fiscal_year_idx').on(t.fiscalYear),
     index('transactions_amount_idx').on(t.amount),
     index('transactions_dataset_idx').on(t.datasetId),
+    // Jurisdiction "biggest payments" + search amount-sort within a jurisdiction.
+    index('transactions_jurisdiction_amount_idx').on(t.jurisdictionId, t.amount),
+    // Operational-vendor aggregation: GROUP BY vendor within a jurisdiction.
+    index('transactions_jurisdiction_vendor_idx').on(t.jurisdictionId, t.vendorId),
+    // NB: a GIN trigram index on vendor_name_raw (transactions_vendor_raw_trgm_idx)
+    // backs the ILIKE '%q%' search; it's applied via
+    // packages/db/migrations/manual_performance.sql since gin_trgm_ops cannot be
+    // expressed in the Drizzle schema builder.
   ],
 );
 

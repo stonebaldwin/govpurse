@@ -28,6 +28,7 @@ import {
   type TimeSeriesPoint,
 } from '@govpurse/ui';
 import { getJurisdictionOverview, listJurisdictions } from '@/lib/data';
+import { JsonLd } from '@/components/json-ld';
 
 export const revalidate = 3600;
 
@@ -50,6 +51,7 @@ export async function generateMetadata({
     description: `Explore ${jurisdiction.name} (${jurisdiction.state}) government spending — ${formatCompactCurrency(
       totalSpend,
     )} across vendors, departments, and categories.`,
+    alternates: { canonical: `/jurisdictions/${id}` },
   };
 }
 
@@ -91,8 +93,39 @@ export default async function JurisdictionPage({ params }: { params: Promise<{ i
     }))
     .slice(0, 6);
 
+  const site = process.env.NEXT_PUBLIC_APP_URL ?? 'https://govpurse.com';
+  const pageUrl = `${site}/jurisdictions/${jurisdiction.id}`;
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'GovernmentOrganization',
+      name: jurisdiction.name,
+      address: { '@type': 'PostalAddress', addressRegion: jurisdiction.state, addressCountry: 'US' },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Dataset',
+      name: `${jurisdiction.name} government spending`,
+      description: `Transaction-level checkbook spending for ${jurisdiction.name}, ${jurisdiction.state} — ${formatNumber(
+        txnCount,
+      )} payments totaling ${formatCompactCurrency(totalSpend)}.`,
+      creator: { '@type': 'Organization', name: 'Govpurse', url: site },
+      isAccessibleForFree: true,
+      url: pageUrl,
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Jurisdictions', item: `${site}/jurisdictions` },
+        { '@type': 'ListItem', position: 2, name: jurisdiction.name, item: pageUrl },
+      ],
+    },
+  ];
+
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
+      <JsonLd data={structuredData} />
       <nav className="text-faint mb-4 text-xs">
         <Link href="/jurisdictions" className="hover:text-primary-700">
           Jurisdictions
@@ -159,14 +192,19 @@ export default async function JurisdictionPage({ params }: { params: Promise<{ i
         </Card>
 
         <Card>
-          <CardHeader className="flex-row items-center justify-between">
-            <CardTitle>Top vendors</CardTitle>
-            <AnalysisBadge
-              kind="concentration"
-              title="Computed analysis — vendor share of total spend."
-            >
-              Concentration
-            </AnalysisBadge>
+          <CardHeader className="gap-1">
+            <div className="flex w-full items-center justify-between">
+              <CardTitle>Top vendors</CardTitle>
+              <AnalysisBadge
+                kind="analysis"
+                title="Computed analysis — operational vendor spend, excluding debt service, payroll-clearing & pension transfers."
+              >
+                Operational
+              </AnalysisBadge>
+            </div>
+            <p className="text-faint text-xs">
+              Excludes debt service, payroll &amp; pension transfers
+            </p>
           </CardHeader>
           <CardContent className="space-y-2">
             {topVendors.length === 0 ? (

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, BarChart3, Bell, Building2, Search, TrendingUp } from 'lucide-react';
 import {
@@ -12,6 +13,12 @@ import { SearchBox } from '@/components/search-box';
 import { getPlatformStats, listJurisdictions } from '@/lib/data';
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+  description:
+    'See exactly where your local government spends its money — search transaction-level vendor payments across jurisdictions, with watchdog-grade analytics. Free to search.',
+};
 
 const USE_CASES = [
   {

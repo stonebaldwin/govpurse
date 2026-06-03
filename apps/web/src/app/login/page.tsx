@@ -5,12 +5,15 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Mail } from 'lucide-react';
 import { Button, Card, CardContent, Input, Label, toast } from '@govpurse/ui';
+import { BrandMark } from '@/components/brand-mark';
 import { authClient } from '@/lib/auth-client';
 
 function LoginInner() {
   const router = useRouter();
   const params = useSearchParams();
-  const next = params.get('next') || '/dashboard';
+  const rawNext = params.get('next') || '/dashboard';
+  // Only allow same-origin relative paths — prevents open-redirect via ?next=.
+  const next = rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : '/dashboard';
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -53,12 +56,13 @@ function LoginInner() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
-      <Link href="/" className="text-ink mb-6 text-center text-xl font-semibold tracking-tight">
-        Govpurse
+      <Link href="/" className="text-ink mb-6 flex items-center justify-center gap-2.5">
+        <BrandMark className="size-7" />
+        <span className="font-display text-xl font-semibold tracking-tight">Govpurse</span>
       </Link>
       <Card>
         <CardContent className="pt-6">
-          <h1 className="text-ink text-lg font-semibold">
+          <h1 className="text-ink text-2xl font-semibold">
             {mode === 'signup' ? 'Create your account' : 'Sign in'}
           </h1>
           <p className="text-muted mt-1 text-sm">

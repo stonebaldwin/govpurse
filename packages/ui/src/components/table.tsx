@@ -38,6 +38,7 @@ interface ThProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
 export function TableHead({ className, numeric, ...props }: ThProps) {
   return (
     <th
+      scope="col"
       className={cn(
         'text-muted h-10 px-3 text-left align-middle text-xs font-medium uppercase tracking-wide',
         numeric && 'text-right',

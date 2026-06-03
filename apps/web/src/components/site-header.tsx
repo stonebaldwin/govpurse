@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { BrandMark } from './brand-mark';
+import { MobileNav } from './mobile-nav';
 import { SearchBox } from './search-box';
 
 export function SiteHeader() {
@@ -23,15 +24,19 @@ export function SiteHeader() {
             Pricing
           </Link>
         </nav>
-        <div className="ml-auto hidden w-full max-w-xs sm:block">
+        <div className="ml-auto hidden w-full max-w-xs md:block">
           <SearchBox compact />
         </div>
         <Link
           href="/login"
-          className="border-line-strong text-ink hover:border-primary-500 hover:text-primary-600 shrink-0 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors"
+          className="border-line-strong text-ink hover:border-primary-500 hover:text-primary-600 hidden shrink-0 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors md:inline-flex"
         >
           Sign in
         </Link>
+        {/* Mobile menu (below md) */}
+        <div className="ml-auto md:hidden">
+          <MobileNav />
+        </div>
       </div>
     </header>
   );
