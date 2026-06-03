@@ -22,6 +22,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://govpurse.com'),
   title: {
     default: 'Govpurse — Follow the money in your local government',
     template: '%s · Govpurse',

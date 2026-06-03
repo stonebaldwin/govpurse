@@ -4,6 +4,13 @@
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-04-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  // Public production config (non-secret). Secrets (DATABASE_URL, BETTER_AUTH_SECRET,
+  // STRIPE_*, RESEND_API_KEY) are set via `wrangler secret put`.
+  "vars": {
+    "NEXT_PUBLIC_APP_URL": "https://govpurse.com",
+    "BETTER_AUTH_URL": "https://govpurse.com",
+    "APP_URL": "https://govpurse.com",
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS",
@@ -27,6 +34,11 @@
   "observability": {
     "enabled": true,
   },
+  // Custom domains (apex + www), provisioned in the active govpurse.com zone.
+  "routes": [
+    { "pattern": "govpurse.com", "custom_domain": true },
+    { "pattern": "www.govpurse.com", "custom_domain": true },
+  ],
   // Production secrets (DATABASE_URL, BETTER_AUTH_SECRET, STRIPE_*, RESEND_API_KEY)
   // are set with `wrangler secret put <NAME>` against the `govpurse-web` Worker.
 }
