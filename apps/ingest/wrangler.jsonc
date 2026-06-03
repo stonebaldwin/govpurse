@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "govpurse-ingest",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-04-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  // The cron fires daily; per-dataset `cadence` gates which datasets actually run
+  // (checkbook data often updates monthly), so SODA is polled politely.
+  "triggers": {
+    "crons": ["0 7 * * *"],
+  },
+  // Secrets (set with `wrangler secret put <NAME>` against the govpurse-ingest Worker):
+  //   DATABASE_URL, SOCRATA_APP_TOKEN, RESEND_API_KEY, RESEND_FROM_EMAIL,
+  //   OPERATOR_ALERT_EMAIL, APP_URL
+  //
+  // To enable JS-rendered (`browser`) portals, provision a Queue and the Browser
+  // Rendering binding, then uncomment (requires the Workers Paid plan):
+  //   wrangler queues create govpurse-ingest-jobs
+  // "queues": {
+  //   "producers": [{ "binding": "INGEST_QUEUE", "queue": "govpurse-ingest-jobs" }],
+  //   "consumers": [{ "queue": "govpurse-ingest-jobs", "max_batch_size": 5, "max_batch_timeout": 30 }]
+  // },
+  // "browser": { "binding": "BROWSER" }
+}

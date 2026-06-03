@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+
+/* The design tokens (@theme) live in the shared design system so the web app
+   and future siblings stay on one palette. */
+@import '../../../../packages/ui/src/styles.css';
+
+/* Tailwind auto-scans this app's source; the shared UI package lives outside it,
+   so scan it explicitly for class names. */
+@source '../../../../packages/ui/src/**/*.{ts,tsx}';

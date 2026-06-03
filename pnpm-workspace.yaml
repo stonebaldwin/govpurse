@@ -1,0 +1,35 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# Better Auth's range allows kysely 0.29, but its kysely-adapter code needs an
+# export that 0.29 removed. Pin to the lower bound of its range (^0.28.17).
+overrides:
+  kysely: 0.28.17
+
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true
+
+minimumReleaseAgeExclude:
+  - '@cloudflare/workers-types@4.20260603.1'
+  - miniflare@4.20260601.0
+  - wrangler@4.97.0
+  - '@better-auth/core@1.6.14'
+  - '@better-auth/drizzle-adapter@1.6.14'
+  - '@better-auth/kysely-adapter@1.6.14'
+  - '@better-auth/memory-adapter@1.6.14'
+  - '@better-auth/mongo-adapter@1.6.14'
+  - '@better-auth/prisma-adapter@1.6.14'
+  - '@better-auth/telemetry@1.6.14'
+  - better-auth@1.6.14
+
+# Allow these dependencies to run install/build scripts (pnpm blocks them by default).
+onlyBuiltDependencies:
+  - esbuild
+  - '@tailwindcss/oxide'
+  - sharp
+  - workerd
+  - '@cloudflare/workerd-darwin-arm64'
+  - '@cloudflare/workerd-darwin-64'
