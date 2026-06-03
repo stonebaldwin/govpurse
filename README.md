@@ -98,6 +98,7 @@ pnpm dev            # → http://localhost:3000  (try /styleguide)
 | `pnpm db:migrate`           | Apply migrations to `DATABASE_URL`           |
 | `pnpm db:studio`            | Open Drizzle Studio                          |
 | `pnpm db:seed`              | Seed demo data                               |
+| `pnpm --filter @govpurse/ingest bootstrap:real` | Ingest **real** Socrata spending (Kansas City, Cincinnati, Denver) |
 
 ### Deploying the web app to Cloudflare Workers
 
@@ -135,7 +136,9 @@ open-checkbook portal).
 
 The code builds and runs without them, degrading gracefully; wire them to go live:
 
-- **Neon** `DATABASE_URL` — then `pnpm db:migrate && pnpm db:seed`.
+- **Neon** `DATABASE_URL` — then `pnpm db:migrate`, then load data: `pnpm db:seed` (small demo) **or**
+  `pnpm --filter @govpurse/ingest bootstrap:real` for **real** Socrata checkbook data (Kansas City MO,
+  Cincinnati OH, Denver CO — ~500k payments). Use `INGEST_ONLY=` to pick jurisdictions.
 - **Cloudflare** (`wrangler login`) — deploy both Workers; create the `govpurse-inc-cache` R2 bucket.
 - **Stripe** — products/prices + webhook secret for billing.
 - **Resend** — magic-link + alert emails.

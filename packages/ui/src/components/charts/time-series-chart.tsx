@@ -81,20 +81,26 @@ export function TimeSeriesChart({
           );
         })}
 
-        {data.map((d, i) =>
-          i % xLabelEvery === 0 || i === data.length - 1 ? (
+        {data.map((d, i) => {
+          const isLast = i === data.length - 1;
+          // Skip a near-final interval label so it can't collide with the forced last one.
+          if (!(i % xLabelEvery === 0 || isLast)) return null;
+          if (!isLast && data.length - 1 - i < xLabelEvery / 2) return null;
+          // Anchor the edge labels inward so the first/last never clip the SVG bounds.
+          const anchor = isLast ? 'end' : i === 0 ? 'start' : 'middle';
+          return (
             <text
               key={d.label}
               x={xAt(i)}
               y={height - 8}
-              textAnchor="middle"
+              textAnchor={anchor}
               fontSize={11}
               fill={AXIS_COLOR.tick}
             >
               {d.label}
             </text>
-          ) : null,
-        )}
+          );
+        })}
 
         {area ? <path d={buildAreaPath(points, baselineY)} fill={color} opacity={0.1} /> : null}
         <path

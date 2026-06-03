@@ -77,6 +77,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   const [result, facets] = await Promise.all([searchTransactions(params), getFacets()]);
   const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize));
+  const jurName = new Map(facets.jurisdictions.map((j) => [j.id, j.name]));
 
   function SortHeader({
     label,
@@ -111,8 +112,11 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
-      <h1 className="text-ink text-3xl font-semibold tracking-tight">Search spending</h1>
-      <p className="text-muted mt-2">
+      <p className="text-primary-700 font-mono text-xs font-medium uppercase tracking-[0.18em]">
+        Search
+      </p>
+      <h1 className="text-ink mt-2 text-4xl tracking-tight">Search spending</h1>
+      <p className="text-muted mt-3">
         Filter transaction-level payments across covered jurisdictions.
       </p>
 
@@ -250,7 +254,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                         href={`/jurisdictions/${t.jurisdictionId}`}
                         className="text-muted hover:text-primary-500"
                       >
-                        {t.jurisdictionId}
+                        {jurName.get(t.jurisdictionId) ?? t.jurisdictionId}
                       </Link>
                     </TableCell>
                     <TableCell className="text-muted">{t.department ?? '—'}</TableCell>
