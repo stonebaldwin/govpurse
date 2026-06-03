@@ -1,13 +1,23 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Fraunces, IBM_Plex_Mono, Public_Sans } from 'next/font/google';
 import { Toaster } from '@govpurse/ui';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
-const jetbrainsMono = JetBrains_Mono({
+// Display serif (editorial headlines) — optical-size axis for crisp big type.
+const fraunces = Fraunces({
   subsets: ['latin'],
-  variable: '--font-jetbrains',
+  axes: ['opsz'],
+  variable: '--font-fraunces',
+  display: 'swap',
+});
+// Civic UI sans (the USWDS typeface).
+const publicSans = Public_Sans({ subsets: ['latin'], variable: '--font-public-sans', display: 'swap' });
+// Monospace for every figure — tabular, aligned.
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-plex-mono',
   display: 'swap',
 });
 
@@ -22,7 +32,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${publicSans.variable} ${plexMono.variable}`}
+    >
       <body className="bg-paper text-ink min-h-screen font-sans antialiased">
         {children}
         <Toaster />

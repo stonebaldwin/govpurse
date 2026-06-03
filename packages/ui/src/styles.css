@@ -1,10 +1,12 @@
 /* ===========================================================================
    @govpurse/ui — design tokens.
 
-   Aesthetic: "serious public-records infrastructure" — trustworthy, calm,
-   numbers-forward. Near-black ink on warm off-white, one institutional civic
-   blue, a restrained categorical palette for charts, and clearly-labeled
-   semantic colors for *computed analysis* (never an accusation).
+   Aesthetic: "the civic ledger" — an investigative-newsroom identity for public
+   money. Warm parchment paper and warm near-black ink (printed-record feel), a
+   confident institutional TREASURY GREEN as the single brand accent, an earthy
+   editorial chart palette, and clearly-labeled semantic colors for *computed
+   analysis* (never an accusation). Type pairs a characterful display serif
+   (Fraunces) with the civic Public Sans for UI and IBM Plex Mono for figures.
 
    This @theme block is the single source of truth; the web app imports it
    (`@import` in globals.css) and it generates every Tailwind utility used
@@ -15,94 +17,99 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Surfaces & ink */
-  --color-ink: #0a0e14; /* near-black primary text */
-  --color-paper: #fafaf8; /* warm off-white page background */
-  --color-surface: #ffffff; /* cards / raised surfaces */
-  --color-surface-subtle: #f1f1ec; /* subtle panels, hovers */
+  /* Surfaces & ink — warm parchment, not the generic blue-tinted SaaS white. */
+  --color-ink: #1c1813; /* warm near-black primary text */
+  --color-paper: #f4efe4; /* warm parchment page background */
+  --color-surface: #fffdf8; /* cards / raised surfaces (warm white) */
+  --color-surface-subtle: #ebe4d4; /* subtle panels, hovers, wells */
 
   /* Lines & secondary text */
-  --color-line: #e7e6e0;
-  --color-line-strong: #d6d5cd;
-  --color-muted: #565d68; /* secondary text */
-  --color-faint: #8b919b; /* tertiary text / placeholders */
+  --color-line: #e3dccb;
+  --color-line-strong: #cdc3aa;
+  --color-muted: #6c6454; /* secondary text (warm gray) */
+  --color-faint: #9a9079; /* tertiary text / placeholders */
 
-  /* Primary — deep institutional civic blue (#1B3A6B) */
-  --color-primary-50: #eef3fa;
-  --color-primary-100: #d5e2f1;
-  --color-primary-200: #aac4e2;
-  --color-primary-300: #7ba1cf;
-  --color-primary-400: #46749f;
-  --color-primary-500: #1b3a6b; /* base */
-  --color-primary-600: #173258;
-  --color-primary-700: #122747;
-  --color-primary-800: #0e1d36;
-  --color-primary-900: #0a1526;
+  /* Primary — institutional treasury green (#16774a). Money + civic + trust. */
+  --color-primary-50: #ecf5ef;
+  --color-primary-100: #d0e7d7;
+  --color-primary-200: #a4cfb2;
+  --color-primary-300: #71b288;
+  --color-primary-400: #3d9162;
+  --color-primary-500: #16774a; /* base */
+  --color-primary-600: #126040;
+  --color-primary-700: #0e4c33;
+  --color-primary-800: #0a3927;
+  --color-primary-900: #07291c;
 
   /* Focus ring */
-  --color-ring: #46749f;
+  --color-ring: #3d9162;
 
-  /* Categorical chart palette — restrained, desaturated, consistent app-wide.
-     chart-1..4 are the workhorses (department/category/vendor series); 5..8
-     are overflow. Distinct in hue, similar in value, so no series shouts. */
-  --color-chart-1: #1b3a6b; /* deep blue */
-  --color-chart-2: #2e7d72; /* teal / pine */
+  /* Categorical chart palette — earthy + editorial, leads with the brand green.
+     1..4 are the workhorses; 5..8 overflow. Distinct in hue, similar in value
+     so no single series shouts on the parchment ground. */
+  --color-chart-1: #16774a; /* treasury green */
+  --color-chart-2: #1f5e8c; /* deep blue */
   --color-chart-3: #b5793a; /* warm ochre */
   --color-chart-4: #7e4f74; /* muted plum */
-  --color-chart-5: #4f7a3f; /* green */
+  --color-chart-5: #2e7d72; /* teal / pine */
   --color-chart-6: #b1554a; /* clay */
-  --color-chart-7: #4a6b8a; /* steel blue */
-  --color-chart-8: #8a7a3c; /* olive */
+  --color-chart-7: #5f6b3a; /* olive */
+  --color-chart-8: #8a6a3c; /* bronze */
 
   /* Directional deltas (YoY / period-over-period). DIRECTIONAL, NOT moral —
-     spending more is not inherently "bad", so these never use red/green alarm. */
-  --color-up: #9a5b22; /* increase — warm bronze */
-  --color-up-bg: #f7efe2;
-  --color-down: #2f6f5c; /* decrease — cool teal-green */
-  --color-down-bg: #e7f1ec;
+     spending more is not inherently "bad", so these avoid red/green alarm and
+     stay clear of the brand green. */
+  --color-up: #a8531c; /* increase — warm rust */
+  --color-up-bg: #f6ecde;
+  --color-down: #3d6a86; /* decrease — cool steel blue */
+  --color-down-bg: #e7eef4;
 
   /* Computed-analysis semantics. Every derived figure is tagged as analysis,
      never an official finding. */
-  --color-analysis: #475467; /* neutral slate — "this is a computed figure" */
-  --color-analysis-bg: #eef0f3;
-  --color-analysis-border: #d6dbe2;
+  --color-analysis: #5c5346; /* warm slate — "this is a computed figure" */
+  --color-analysis-bg: #efeadf;
+  --color-analysis-border: #ddd4c1;
 
   --color-spike: #9a6a07; /* amber — "anomalous vs. baseline" (attention) */
   --color-spike-bg: #fbf2db;
   --color-spike-border: #efd9a0;
 
   --color-concentration: #1f5e8c; /* blue — "share-of-category" */
-  --color-concentration-bg: #e6f0f7;
-  --color-concentration-border: #bcd8ec;
+  --color-concentration-bg: #e7f0f7;
+  --color-concentration-border: #bed9ec;
 
-  /* Typography */
+  /* Typography — Fraunces (display serif) / Public Sans (UI) / IBM Plex Mono. */
+  --font-display:
+    var(--font-fraunces), ui-serif, Georgia, 'Times New Roman', Times, serif;
   --font-sans:
-    var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica,
+    var(--font-public-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
   --font-mono:
-    var(--font-jetbrains), ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+    var(--font-plex-mono), ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
   /* Radii */
   --radius-sm: 0.25rem;
   --radius-md: 0.375rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
 
-  /* Elevation */
-  --shadow-card: 0 1px 2px rgba(10, 14, 20, 0.04), 0 1px 3px rgba(10, 14, 20, 0.06);
+  /* Elevation — warm, soft (shadow tinted with the ink tone). */
+  --shadow-card: 0 1px 2px rgba(28, 24, 19, 0.05), 0 1px 3px rgba(28, 24, 19, 0.07);
+  --shadow-lift: 0 6px 24px rgba(28, 24, 19, 0.09), 0 2px 8px rgba(28, 24, 19, 0.05);
 }
 
-/* Dark-mode token stub — flipped surfaces, primary kept restrained. */
+/* Dark-mode token stub — warm ink ground, parchment text, green kept. */
 @layer base {
   .dark {
-    --color-ink: #f3f4f1;
-    --color-paper: #0a0e14;
-    --color-surface: #11161f;
-    --color-surface-subtle: #1a212c;
-    --color-line: #232b37;
-    --color-line-strong: #303a48;
-    --color-muted: #9aa2ae;
-    --color-faint: #6b7280;
+    --color-ink: #f2ece0;
+    --color-paper: #14110c;
+    --color-surface: #1c1812;
+    --color-surface-subtle: #262019;
+    --color-line: #2f2820;
+    --color-line-strong: #3d352a;
+    --color-muted: #a99f8c;
+    --color-faint: #6f6757;
   }
 }
 
@@ -122,6 +129,15 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Display serif for the major headings — the editorial signature. Component
+     titles (h3+, styled spans) stay on the UI sans for legibility at size. */
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.012em;
   }
 
   /* Tabular figures for every money amount, count, date, and ID. This is a

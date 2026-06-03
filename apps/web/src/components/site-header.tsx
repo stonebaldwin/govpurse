@@ -1,14 +1,18 @@
 import Link from 'next/link';
+import { BrandMark } from './brand-mark';
 import { SearchBox } from './search-box';
 
 export function SiteHeader() {
   return (
-    <header className="border-line bg-paper/85 sticky top-0 z-30 border-b backdrop-blur">
+    <header className="border-line bg-paper/80 sticky top-0 z-30 border-b backdrop-blur">
+      {/* Masthead accent rule */}
+      <div className="bg-primary-500 h-[3px] w-full" />
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-6 py-3">
-        <Link href="/" className="text-ink shrink-0 font-semibold tracking-tight">
-          Govpurse
+        <Link href="/" className="text-ink flex shrink-0 items-center gap-2.5">
+          <BrandMark className="size-7" />
+          <span className="font-display text-[1.2rem] font-semibold tracking-tight">Govpurse</span>
         </Link>
-        <nav className="text-muted hidden items-center gap-5 text-sm md:flex">
+        <nav className="text-muted hidden items-center gap-6 text-sm font-medium md:flex">
           <Link href="/search" className="hover:text-ink transition-colors">
             Search
           </Link>
@@ -24,7 +28,7 @@ export function SiteHeader() {
         </div>
         <Link
           href="/login"
-          className="text-muted hover:text-ink shrink-0 text-sm font-medium transition-colors"
+          className="border-line-strong text-ink hover:border-primary-500 hover:text-primary-600 shrink-0 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors"
         >
           Sign in
         </Link>

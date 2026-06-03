@@ -79,6 +79,59 @@ export async function countCoveredJurisdictions(): Promise<number> {
   return (await listJurisdictions()).length;
 }
 
+export interface PlatformStats {
+  jurisdictions: number;
+  totalSpend: number;
+  payments: number;
+  vendors: number;
+  months: number;
+  latestPeriod: string | null;
+}
+
+/** Site-wide totals for the landing page "by the numbers" strip. */
+export async function getPlatformStats(): Promise<PlatformStats> {
+  const empty: PlatformStats = {
+    jurisdictions: 0,
+    totalSpend: 0,
+    payments: 0,
+    vendors: 0,
+    months: 0,
+    latestPeriod: null,
+  };
+  const db = tryGetDb();
+  if (!db) return empty;
+  const overall = eq(spendAggregates.dimension, 'overall');
+  const [[j], [agg], [v], [period]] = await Promise.all([
+    db
+      .select({ c: COUNT })
+      .from(jurisdictions)
+      .where(eq(jurisdictions.isActive, true)),
+    db
+      .select({
+        total: sql<string>`coalesce(sum(${spendAggregates.total}), 0)`,
+        cnt: sql<string>`coalesce(sum(${spendAggregates.txnCount}), 0)`,
+      })
+      .from(spendAggregates)
+      .where(overall),
+    db.select({ c: COUNT }).from(vendors),
+    db
+      .select({
+        months: sql<string>`count(distinct ${spendAggregates.period})`,
+        latest: sql<string>`max(${spendAggregates.period})`,
+      })
+      .from(spendAggregates)
+      .where(overall),
+  ]);
+  return {
+    jurisdictions: num(j?.c),
+    totalSpend: num(agg?.total),
+    payments: num(agg?.cnt),
+    vendors: num(v?.c),
+    months: num(period?.months),
+    latestPeriod: period?.latest ?? null,
+  };
+}
+
 export interface JurisdictionOverview {
   jurisdiction: { id: string; name: string; state: string; type: string };
   totalSpend: number;

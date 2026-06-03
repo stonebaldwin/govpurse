@@ -93,14 +93,29 @@ export default async function JurisdictionPage({ params }: { params: Promise<{ i
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+      <nav className="text-faint mb-4 text-xs">
+        <Link href="/jurisdictions" className="hover:text-primary-700">
+          Jurisdictions
+        </Link>
+        <span className="mx-1.5">/</span>
+        <span className="text-muted">{jurisdiction.name}</span>
+      </nav>
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-faint text-xs font-medium uppercase tracking-wide">
+          <p className="text-primary-700 font-mono text-xs font-medium uppercase tracking-[0.18em]">
             {jurisdiction.state} · {jurisdiction.type}
           </p>
-          <h1 className="text-ink mt-1 text-3xl font-semibold tracking-tight">
-            {jurisdiction.name}
-          </h1>
+          <h1 className="text-ink mt-2 text-4xl tracking-tight">{jurisdiction.name}</h1>
+          <p className="text-muted mt-2 text-sm">
+            <span className="text-ink font-mono font-medium tabular-nums">
+              {formatNumber(txnCount)}
+            </span>{' '}
+            payments ·{' '}
+            <span className="text-ink font-mono font-medium tabular-nums">
+              {formatCompactCurrency(totalSpend)}
+            </span>{' '}
+            total tracked
+          </p>
         </div>
         <Button asChild>
           <Link href={`/login?alert=jurisdiction:${jurisdiction.id}`}>

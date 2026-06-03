@@ -243,38 +243,38 @@ const TRANSACTIONS: TransactionRow[] = [
 const ANALYSIS_KINDS: AnalysisKind[] = ['analysis', 'spike', 'concentration', 'sole-source'];
 
 const PRIMARY_SCALE: ReadonlyArray<readonly [string, string]> = [
-  ['50', '#eef3fa'],
-  ['100', '#d5e2f1'],
-  ['200', '#aac4e2'],
-  ['300', '#7ba1cf'],
-  ['400', '#46749f'],
-  ['500', '#1b3a6b'],
-  ['600', '#173258'],
-  ['700', '#122747'],
-  ['800', '#0e1d36'],
-  ['900', '#0a1526'],
+  ['50', '#ecf5ef'],
+  ['100', '#d0e7d7'],
+  ['200', '#a4cfb2'],
+  ['300', '#71b288'],
+  ['400', '#3d9162'],
+  ['500', '#16774a'],
+  ['600', '#126040'],
+  ['700', '#0e4c33'],
+  ['800', '#0a3927'],
+  ['900', '#07291c'],
 ];
 
 const BASE_SWATCHES: ReadonlyArray<readonly [string, string]> = [
-  ['ink', '#0a0e14'],
-  ['paper', '#fafaf8'],
-  ['surface', '#ffffff'],
-  ['surface-subtle', '#f1f1ec'],
-  ['line', '#e7e6e0'],
-  ['line-strong', '#d6d5cd'],
-  ['muted', '#565d68'],
-  ['faint', '#8b919b'],
+  ['ink', '#1c1813'],
+  ['paper', '#f4efe4'],
+  ['surface', '#fffdf8'],
+  ['surface-subtle', '#ebe4d4'],
+  ['line', '#e3dccb'],
+  ['line-strong', '#cdc3aa'],
+  ['muted', '#6c6454'],
+  ['faint', '#9a9079'],
 ];
 
 const CHART_SWATCHES: ReadonlyArray<readonly [string, string]> = [
-  ['chart-1', '#1b3a6b'],
-  ['chart-2', '#2e7d72'],
+  ['chart-1', '#16774a'],
+  ['chart-2', '#1f5e8c'],
   ['chart-3', '#b5793a'],
   ['chart-4', '#7e4f74'],
-  ['chart-5', '#4f7a3f'],
+  ['chart-5', '#2e7d72'],
   ['chart-6', '#b1554a'],
-  ['chart-7', '#4a6b8a'],
-  ['chart-8', '#8a7a3c'],
+  ['chart-7', '#5f6b3a'],
+  ['chart-8', '#8a6a3c'],
 ];
 
 function Section({

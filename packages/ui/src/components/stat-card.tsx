@@ -20,7 +20,9 @@ export function StatCard({ label, value, delta, caption, children, className }: 
   return (
     <div className={cn('border-line bg-surface shadow-card rounded-lg border p-5', className)}>
       <div className="flex items-center justify-between gap-2">
-        <span className="text-muted text-xs font-medium uppercase tracking-wide">{label}</span>
+        <span className="text-muted font-mono text-[0.7rem] font-medium uppercase tracking-wider">
+          {label}
+        </span>
         {delta}
       </div>
       <div className="text-ink mt-2 font-mono text-2xl font-semibold tabular-nums tracking-tight">
