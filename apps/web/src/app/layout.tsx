@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import Script from 'next/script';
 import { Fraunces, IBM_Plex_Mono, Public_Sans } from 'next/font/google';
 import { Toaster } from '@govpurse/ui';
 import { JsonLd } from '@/components/json-ld';
@@ -76,6 +77,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className={`${fraunces.variable} ${publicSans.variable} ${plexMono.variable}`}>
       <body className="bg-paper text-ink min-h-screen font-sans antialiased">
         <JsonLd data={structuredData} />
+        {/* Ahrefs Web Analytics */}
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="4g4KSg+RYwi2Ba0C9bKluA"
+          strategy="afterInteractive"
+        />
         {children}
         <Toaster />
       </body>
